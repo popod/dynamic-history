@@ -1,29 +1,39 @@
 import * as moment from 'moment'
 
-export function itemsToRemove(dates: string[], options: object = {}) {
+export function itemsToRemove(dataArray /*, options: object = {} */) {
   // todo: remove all items which are not passing some tests
   // for us, this should be items with a size which is bellow 5 Ko ?
   // todo: allow to limit items to a max of x items
-  
+  // todo: allow the latest x items to newer be removed ?
+
+  let isStringInput: boolean = true
+
+  if (dataArray.length && !dataArray[0].date) {
+    isStringInput = false
+    dataArray = dataArray.map(item => {
+      return { date: item }
+    })
+  }
+
   // const datesToKeep: string[] = []
-  const datesToRemove: string[] = []
+  const datesToRemove = []
 
   let latestWeek: string = '0000-00'
   let latestMonth: string = '0000-00'
 
-  dates.sort((a, b) => {
-    return (new Date(b)).getTime() - (new Date(a)).getTime()
+  dataArray.sort((a, b) => {
+    return (new Date(b.date)).getTime() - (new Date(a.date)).getTime()
   })
   // console.log(dates)
 
-  dates.forEach(date => {
+  dataArray.forEach(data => {
     // todo: remove items with duplicates dates ?
 
     // keep all for the latest 3 months
     const keepAllLimit = new Date()
     keepAllLimit.setMonth(keepAllLimit.getMonth() - 3)
 
-    if ((new Date(date)).getTime() > keepAllLimit.getTime()) {
+    if ((new Date(data.date)).getTime() > keepAllLimit.getTime()) {
       // console.log('is in the 3 first months', keepAllLimit, (new Date(date)))
       // datesToKeep.push(date)
       return
@@ -33,14 +43,14 @@ export function itemsToRemove(dates: string[], options: object = {}) {
     const keepOneByWeekLimit = new Date()
     keepOneByWeekLimit.setMonth(keepOneByWeekLimit.getMonth() - 6)
 
-    if ((new Date(date)).getTime() > keepOneByWeekLimit.getTime()) {
+    if ((new Date(data.date)).getTime() > keepOneByWeekLimit.getTime()) {
       // console.log('is in the 3-6 months', keepOneByWeekLimit, (new Date(date)))
 
-      const currentWeek = moment(date).format('YYYY-WW')
+      const currentWeek = moment(data.date).format('YYYY-WW')
       // console.log('currentWeek', currentWeek)
 
       if (latestWeek === currentWeek) {
-        datesToRemove.push(date)
+        datesToRemove.push(data)
       }
       latestWeek = currentWeek
 
@@ -52,14 +62,14 @@ export function itemsToRemove(dates: string[], options: object = {}) {
     const keepOneByMonthLimit = new Date()
     keepOneByMonthLimit.setMonth(keepOneByMonthLimit.getMonth() - 24)
 
-    if ((new Date(date)).getTime() > keepOneByMonthLimit.getTime()) {
+    if ((new Date(data.date)).getTime() > keepOneByMonthLimit.getTime()) {
       // console.log('is in the 6-24 months', keepOneByMonthLimit, (new Date(date)))
 
-      const currentMonth = moment(date).format('YYYY-MM')
+      const currentMonth = moment(data.date).format('YYYY-MM')
       // console.log('currentMonth', currentMonth)
 
       if (latestMonth === currentMonth) {
-        datesToRemove.push(date)
+        datesToRemove.push(data)
       }
       latestMonth = currentMonth
 
@@ -68,13 +78,14 @@ export function itemsToRemove(dates: string[], options: object = {}) {
     }
 
     // console.log('is after 24 months', (new Date(date)))
-    datesToRemove.push(date)
+    datesToRemove.push(data)
 
     // items which are more than 24 months are deleted if the limit is reach ?
   })
 
-  return datesToRemove
+  return isStringInput ? datesToRemove : datesToRemove.map(item => item.date)
 }
+
 /* export function add() {
   console.log('add')
 } */

@@ -5,6 +5,15 @@ test('An empty dates array should return an empty array.', () => {
   expect(itemsToRemove([])).toEqual([])
 })
 
+test('It should return in the same type of the dates array parameter.', () => {
+  expect(itemsToRemove([
+    { date: moment().format('YYYY-MM-DD') },
+    { date: moment().subtract(3, 'years').format('YYYY-MM-DD') }
+  ])).toEqual([
+    { date: moment().subtract(3, 'years').format('YYYY-MM-DD') }
+  ])
+})
+
 // todo: test if it works with date with time
 
 describe('Individually test periods.', () => {
