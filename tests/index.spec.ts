@@ -16,7 +16,8 @@ test('It should return in the same type of the dates array parameter.', () => {
 
 // todo: test if it works with date with time
 
-describe('Individually test periods.', () => {
+// DEFAULT PERIODS TEST
+describe('Individually test default periods.', () => {
   test('Dates in the 3 first months should not be removed.', () => {
     expect(itemsToRemove([
       moment().format('YYYY-MM-DD'),
@@ -68,7 +69,8 @@ describe('Individually test periods.', () => {
   })
 })
 
-describe('Test limits.', () => {
+// DEFAULT LIMITS TEST
+describe('Test default limits.', () => {
   test('Limit for the first 3 months should be correct.', () => {
     expect(itemsToRemove([
       moment().subtract(3, 'months').add(1, 'day').format('YYYY-MM-DD'),
@@ -103,6 +105,46 @@ describe('Test limits.', () => {
       moment().subtract(24, 'months').format('YYYY-MM-DD'),
       moment().subtract(24, 'months').subtract(1, 'day').format('YYYY-MM-DD'),
       moment().subtract(24, 'months').subtract(2, 'day').format('YYYY-MM-DD')
+    ])
+  })
+})
+
+// CUSTOMS LIMITS TEST
+describe('Test customs limits.', () => {
+  test('Limit custom for "keep all" items of 1 months should be correct.', () => {
+    expect(itemsToRemove([
+      moment().subtract(1, 'months').add(1, 'day').format('YYYY-MM-DD'),
+      moment().subtract(1, 'months').format('YYYY-MM-DD'),
+      moment().subtract(1, 'months').subtract(1, 'day').format('YYYY-MM-DD'),
+      moment().subtract(1, 'months').subtract(2, 'day').format('YYYY-MM-DD')
+    ], { keepAllLimitInMonth: 1 })).toEqual([
+      moment().subtract(1, 'months').subtract(1, 'day').format('YYYY-MM-DD'),
+      moment().subtract(1, 'months').subtract(2, 'day').format('YYYY-MM-DD')
+    ])
+  })
+
+  test('Limit for customs "keep one by week" between 3 and 8 months should be correct.', () => {
+    expect(itemsToRemove([
+      moment().subtract(8, 'months').add(1, 'day').format('YYYY-MM-DD'),
+      moment().subtract(8, 'months').format('YYYY-MM-DD'),
+      moment().subtract(8, 'months').subtract(1, 'day').format('YYYY-MM-DD'),
+      moment().subtract(8, 'months').subtract(2, 'day').format('YYYY-MM-DD')
+    ], { keepOneByWeekLimitInMonth: 8 })).toEqual([
+      moment().subtract(8, 'months').subtract(1, 'day').format('YYYY-MM-DD'),
+      moment().subtract(8, 'months').subtract(2, 'day').format('YYYY-MM-DD')
+    ])
+  })
+
+  test('Limit for customs "keep one by month" between 6 and 9 months should be correct.', () => {
+    expect(itemsToRemove([
+      moment().subtract(9, 'months').add(1, 'day').format('YYYY-MM-DD'),
+      moment().subtract(9, 'months').format('YYYY-MM-DD'),
+      moment().subtract(9, 'months').subtract(1, 'day').format('YYYY-MM-DD'),
+      moment().subtract(9, 'months').subtract(2, 'day').format('YYYY-MM-DD')
+    ], { keepOneByMonthLimitInMonth: 9 })).toEqual([
+      moment().subtract(9, 'months').format('YYYY-MM-DD'),
+      moment().subtract(9, 'months').subtract(1, 'day').format('YYYY-MM-DD'),
+      moment().subtract(9, 'months').subtract(2, 'day').format('YYYY-MM-DD')
     ])
   })
 })

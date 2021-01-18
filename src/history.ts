@@ -1,10 +1,24 @@
 import * as moment from 'moment'
 
-export function itemsToRemove(dataArray /*, options: object = {} */) {
+export function itemsToRemove(dataArray, options?: { keepAllLimitInMonth?: number, keepOneByWeekLimitInMonth?: number, keepOneByMonthLimitInMonth?: number }) {
   // todo: remove all items which are not passing some tests
   // for us, this should be items with a size which is bellow 5 Ko ?
   // todo: allow to limit items to a max of x items
   // todo: allow the latest x items to newer be removed ?
+
+  // Set default values to options parameters if not defined
+  if (!options) {
+    options = {}
+  }
+  if (!options.keepAllLimitInMonth) {
+    options.keepAllLimitInMonth = 3
+  }
+  if (!options.keepOneByWeekLimitInMonth) {
+    options.keepOneByWeekLimitInMonth = 6
+  }
+  if (!options.keepOneByMonthLimitInMonth) {
+    options.keepOneByMonthLimitInMonth = 24
+  }
 
   let isStringInput: boolean = true
 
@@ -31,7 +45,7 @@ export function itemsToRemove(dataArray /*, options: object = {} */) {
 
     // keep all for the latest 3 months
     const keepAllLimit = new Date()
-    keepAllLimit.setMonth(keepAllLimit.getMonth() - 3)
+    keepAllLimit.setMonth(keepAllLimit.getMonth() - options.keepAllLimitInMonth)
 
     if ((new Date(data.date)).getTime() > keepAllLimit.getTime()) {
       // console.log('is in the 3 first months', keepAllLimit, (new Date(date)))
@@ -41,7 +55,7 @@ export function itemsToRemove(dataArray /*, options: object = {} */) {
 
     // keep one item by week from 3 to 6 months
     const keepOneByWeekLimit = new Date()
-    keepOneByWeekLimit.setMonth(keepOneByWeekLimit.getMonth() - 6)
+    keepOneByWeekLimit.setMonth(keepOneByWeekLimit.getMonth() - options.keepOneByWeekLimitInMonth)
 
     if ((new Date(data.date)).getTime() > keepOneByWeekLimit.getTime()) {
       // console.log('is in the 3-6 months', keepOneByWeekLimit, (new Date(date)))
@@ -60,7 +74,7 @@ export function itemsToRemove(dataArray /*, options: object = {} */) {
 
     // keep one item by month from 6 to 24 months
     const keepOneByMonthLimit = new Date()
-    keepOneByMonthLimit.setMonth(keepOneByMonthLimit.getMonth() - 24)
+    keepOneByMonthLimit.setMonth(keepOneByMonthLimit.getMonth() - options.keepOneByMonthLimitInMonth)
 
     if ((new Date(data.date)).getTime() > keepOneByMonthLimit.getTime()) {
       // console.log('is in the 6-24 months', keepOneByMonthLimit, (new Date(date)))
