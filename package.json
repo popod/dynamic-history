@@ -1,6 +1,6 @@
 {
   "name": "dynamic-history",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "JavaScript module to dynamically manage history items based on date.",
   "keywords": [],
   "author": "Popod",
