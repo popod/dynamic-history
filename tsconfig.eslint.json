@@ -1,0 +1,9 @@
+// this file is used by the linter
+{
+  "extends": "./tsconfig.json",
+  // this is needed to include the tests directory to the linter
+  "include": [
+    "src",
+    "tests"
+  ]
+}

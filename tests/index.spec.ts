@@ -60,7 +60,7 @@ describe('Individually test default periods.', () => {
       moment().subtract(24, 'months').startOf('month').format('YYYY-MM-DD'),
       moment().subtract(26, 'months').startOf('month').add(15, 'days').format('YYYY-MM-DD'),
       moment().subtract(26, 'months').startOf('month').format('YYYY-MM-DD'),
-      moment().subtract(11, 'months').startOf('month').add(1, 'day').format('YYYY-MM-DD'),
+      moment().subtract(11, 'months').startOf('month').add(1, 'day').format('YYYY-MM-DD')
     ])).toEqual([
       moment().subtract(24, 'months').startOf('month').format('YYYY-MM-DD'),
       moment().subtract(26, 'months').startOf('month').add(15, 'days').format('YYYY-MM-DD'),

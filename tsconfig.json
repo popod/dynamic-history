@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2016",
+    "target": "es2022",
     "declaration": true,
     "outDir": "./dist",
-    "removeComments": true
+    "removeComments": true,
+    "strict": true
   },
+  // the files used on build
   "include": [
     "src/**/*"
   ]
